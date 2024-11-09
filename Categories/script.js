@@ -7,14 +7,14 @@ function loadCategory(category) {
   // Define templates with images and HTML file links
   const categoryTemplates = {
     ecommerce: [
-      { src: "Images/template1.png", title: "E-commerce Template 1", html: "ecommerce-template-1" },
-      { src: "Images/template2.png", title: "E-commerce Template 2", html: "ecommerce-template-2" },
-      { src: "Images/template3.png", title: "E-commerce Template 3", html: "ecommerce-template-3.html" },
-      { src: "Images/template4.jpg", title: "E-commerce Template 4", html: "ecommerce-template-2"},
+      { src: "../Images/template1.png", title: "E-commerce Template 1", html: "ecommerce-template-1" },
+      { src: "../Images/template2.png", title: "E-commerce Template 2", html: "ecommerce-template-2" },
+      { src: "../Images/template3.png", title: "E-commerce Template 3", html: "ecommerce-template-3.html" },
+      { src: "../Images/template4.jpg", title: "E-commerce Template 4", html: "ecommerce-template-2"},
       // Add more templates as needed
     ],
     gym: [
-      {src: "Images/template1.png", title: "Gym template 1", html: "gym-template-1"}
+      {src: "../Images/template1.png", title: "Gym template 1", html: "gym-template-1"}
     ]
     // Define other categories if needed
   };
