@@ -1,8 +1,6 @@
 function loadCategory(category) {
   const container = document.getElementById("template-selection");
-  const customizeContainer = document.getElementById("customize-container");
   container.innerHTML = "<p>Loading templates...</p>";
-  //customizeContainer.innerHTML = "";
 
   // Define templates with images and HTML file links
   const categoryTemplates = {
