@@ -31,29 +31,3 @@ window.onload = () => {
     document.getElementById("customize-container").innerHTML = "<p>No template selected! Please go back and select a template.</p>";
   }
 };
-
-// Manually call loadTemplate with a specific templateId
-//loadTemplate('e-commerce-template-1');
-
-// Add customization options
-function addText() {
-  const templateContainer = document.getElementById('template-container');
-  const newText = document.createElement('div');
-  newText.contentEditable = "true";
-  newText.textContent = "Editable Text";
-  newText.style.border = "1px dashed #ccc";
-  newText.style.padding = "10px";
-  newText.style.margin = "10px 0";
-  templateContainer.appendChild(newText);
-}
-
-function addImage() {
-  const templateContainer = document.getElementById('template-container');
-  const newImage = document.createElement('img');
-  newImage.src = "placeholder-image.jpg"; // Replace with your placeholder image
-  newImage.alt = "Custom Image";
-  newImage.style.width = "200px";
-  newImage.style.height = "auto";
-  newImage.style.margin = "10px 0";
-  templateContainer.appendChild(newImage);
-}
