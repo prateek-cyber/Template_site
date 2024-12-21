@@ -61,19 +61,153 @@ body {
   color: #f39c12;
 }
 
-#category-selection, #template-selection, #customize-template {
+/* Hero Section */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #3498db, #9b59b6); /* Gradient background */
+  padding: 100px 20px 60px;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Adds a dark overlay for better text readability */
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.hero-subtext {
+  font-size: 1.2rem;
+  color: #f1f1f1;
+  margin-bottom: 30px;
+  max-width: 700px;
+  line-height: 1.8;
+  margin: 0 auto;
+}
+
+.cta-link {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2ecc71; /* Green link */
+  text-decoration: none;
+  padding: 12px 25px;
+  border: 2px solid #2ecc71;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: all 0.3s;
+}
+
+.cta-link:hover {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.hero-illustrations {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.hero-illustrations .hero-img {
+  width: 180px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-illustrations .hero-img:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Category Selection Section */
+#category-selection {
+  padding: 40px 20px;
+  background-color: #fff;
+  text-align: center;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+#category-selection h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.category-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  background-color: #dce4e9;
+  color: #160202;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.category-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.category-button:active {
+  background-color: #1e6a93;
+}
+
+/* Template Section */
+#template-selection {
   padding: 20px;
   margin: 20px auto;
-  max-width: 800px;
+  max-width: 80%; /* Increase the width to 80% */
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap */
+  justify-content: space-around; /* Distribute cards evenly */
+  gap: 20px; /* Add spacing between the cards */
 }
 
 #template-selection .card {
   cursor: pointer;
   transition: transform 0.2s;
-  height: 300px; /* Set a fixed height for each card */
+  height: 300px; /* Keep the fixed height */
+  width: 230px; /* Set a fixed width for the cards */
+  border-radius: 20px;
 }
 
 #template-selection .card:hover {
@@ -82,10 +216,12 @@ body {
 
 #template-selection .card-img-top {
   width: 100%;
-  height: 200px; /* Set a fixed height for each image */
+  height: 200px; /* Fixed height for the image */
   object-fit: cover; /* Ensures the image fills the space without distortion */
 }
 
+
+/* css for customize.html */
 #customize-container {
   min-height: 300px;
   padding: 20px;
@@ -93,3 +229,4 @@ body {
   background-color: #f8f9fa;
   
 }
+

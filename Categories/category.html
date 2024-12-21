@@ -24,16 +24,39 @@
     </div>
   </nav>
 
+  <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">1550+ Free HTML Email Templates</h1>
+      <p class="hero-subtext">
+        Abandoned cart &nbsp;&bull;&nbsp; Black Friday &nbsp;&bull;&nbsp; Gaming &nbsp;&bull;&nbsp; Nonprofit &nbsp;&bull;&nbsp; Password reset &nbsp;&bull;&nbsp; Signature &nbsp;&bull;&nbsp; Survey & feedback &nbsp;&bull;&nbsp; Webinars &nbsp;&bull;&nbsp; Welcome
+      </p>
+      <a href="#" class="cta-link">Order a Custom Template &rarr;</a>
+      <div class="hero-illustrations">
+        <img src="../Images/template4.jpg" alt="Illustration 1" class="hero-img">
+        <img src="../Images/restaurant_template.webp" alt="Illustration 2" class="hero-img">
+        <img src="../Images/gym_template.webp" alt="Illustration 3" class="hero-img">
+      </div>
+    </div>
+  </div>
+  
+  
   <div id="category-selection">
     <h2>Select a Category</h2>
-    <button onclick="loadCategory('ecommerce')">E-commerce</button>
-    <button onclick="loadCategory('restaurant')">Restaurant</button>
-    <button onclick="loadCategory('gym')">Gym</button>
+    <div class="button-container">
+      <button class="category-button" onclick="loadCategory('ecommerce')">E-commerce</button>
+      <button class="category-button" onclick="loadCategory('restaurant')">Restaurant</button>
+      <button class="category-button" onclick="loadCategory('gym')">Gym</button>
+    </div>
   </div>
-
+  
   <div id="template-selection">
-    <!-- Dynamic content will be loaded here by JavaScript -->
+    <h2>Templates</h2>
+    <div class="template-grid">
+      <!-- Dynamic template content loaded by JavaScript -->
+    </div>
   </div>
+  
 
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
