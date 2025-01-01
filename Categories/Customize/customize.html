@@ -3,8 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customize Template</title>
-  <link rel="stylesheet" href="./customize.css">
+  <title>GrapesJS Template Editor</title>
+  <!-- GrapesJS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+  <link rel = "stylesheet" href = "customize.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #editor-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #toolbar {
+      background: #333;
+      color: white;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    #toolbar button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #toolbar button:hover {
+      background: #0056b3;
+    }
+    #gjs {
+      flex: 1; /* Editor takes up the remaining space */
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -19,14 +53,85 @@
       </ul>
     </div>
   </nav>
-
-  <div id="customize-template">
-    <h2>Customize Your Template</h2>
-    <div id="customize-container" class="sortable">
-      <!-- Loaded template content (image preview) will appear here -->
-    </div>
+  <div id="editor-container">
+    <!-- GrapesJS Editor Container -->
+    <div id="gjs"></div>
   </div>
 
-  <script src="customize.js"></script>
+  <!-- GrapesJS JavaScript -->
+  <script src="https://unpkg.com/grapesjs"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize GrapesJS Editor
+      const editor = grapesjs.init({
+        container: '#gjs',
+        fromElement: true,
+        components: `
+          <div class="header">
+            <h1>Welcome to the Template Editor</h1>
+          </div>
+          <div class="content">
+            <p>Use the toolbar to add text or upload images.</p>
+          </div>
+        `,
+        style: `
+          .header {
+            text-align: center;
+            background: #f5f5f5;
+            padding: 20px;
+          }
+          .content {
+            padding: 20px;
+          }
+          img {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+          }
+        `,
+        plugins: ['gjs-blocks-basic'],
+        pluginsOpts: {
+          'gjs-blocks-basic': {}
+        },
+      });
+
+      // Add Text Button Functionality
+      const addTextBtn = document.getElementById('add-text-btn');
+      addTextBtn.addEventListener('click', () => {
+        const textComponent = editor.addComponents({
+          type: 'text',
+          content: 'New Text Block',
+          style: { padding: '10px', 'font-size': '16px' },
+        });
+        editor.select(textComponent); // Automatically select the new component
+      });
+
+      // Upload Image Button Functionality
+      const uploadImageBtn = document.getElementById('upload-image-btn');
+      uploadImageBtn.addEventListener('click', () => {
+        // Create an <input type="file"> element to select the image
+        const inputFile = document.createElement('input');
+        inputFile.type = 'file';
+        inputFile.accept = 'image/*'; // Allow only image files
+        inputFile.onchange = (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              // Add the uploaded image to the editor
+              const imageComponent = editor.addComponents({
+                type: 'image',
+                src: e.target.result,
+                style: { width: 'auto', height: 'auto', 'max-width': '100%' },
+              });
+              editor.select(imageComponent); // Automatically select the new component
+            };
+            reader.readAsDataURL(file); // Read the file as a Data URL
+          }
+        };
+        inputFile.click(); // Trigger the file input dialog
+      });
+    });
+  </script>
 </body>
 </html>
