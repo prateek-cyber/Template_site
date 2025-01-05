@@ -3,8 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customize Template</title>
-  <link rel="stylesheet" href="./customize.css">
+  <title>GrapesJS Template Editor</title>
+  <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+  <link rel="stylesheet" href="customize.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #editor-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #toolbar {
+      background: #333;
+      color: white;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    #toolbar button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #toolbar button:hover {
+      background: #0056b3;
+    }
+    #gjs {
+      flex: 1;
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -19,14 +52,94 @@
       </ul>
     </div>
   </nav>
-
-  <div id="customize-template">
-    <h2>Customize Your Template</h2>
-    <div id="customize-container" class="sortable">
-      <!-- Loaded template content (image preview) will appear here -->
-    </div>
+  <div id="editor-container">
+    <div id="gjs"></div>
   </div>
 
-  <script src="customize.js"></script>
+  <script src="https://unpkg.com/grapesjs"></script>
+  <script>
+    // Function to load template content
+    async function loadTemplateContent(category) {
+      try {
+        const response = await fetch(`../templates/${category}.html`);
+        if (!response.ok) throw new Error('Failed to load template');
+        return await response.text();
+      } catch (error) {
+        console.error("Error loading template:", error);
+        return `
+          <div class="error-message">
+            <h2>Failed to load template</h2>
+            <p>Please try again or select a different template.</p>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Get template category from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('template');
+      
+      if (!category) {
+        console.error("No template category provided");
+        return;
+      }
+
+      // Load template content
+      const templateContent = await loadTemplateContent(category);
+
+      // Initialize GrapesJS Editor
+      const editor = grapesjs.init({
+        container: '#gjs',
+        fromElement: false,
+        components: templateContent,
+        height: '100%',
+        storageManager: false,
+        plugins: ['gjs-blocks-basic'],
+        pluginsOpts: {
+          'gjs-blocks-basic': {}
+        },
+        canvas: {
+          styles: [
+            'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
+          ]
+        }
+      });
+
+      // Add Text Button Functionality
+      document.getElementById('add-text-btn').addEventListener('click', () => {
+        const textComponent = editor.addComponents({
+          type: 'text',
+          content: 'New Text Block',
+          style: { padding: '10px', 'font-size': '16px' },
+        });
+        editor.select(textComponent);
+      });
+
+      // Upload Image Button Functionality
+      document.getElementById('upload-image-btn').addEventListener('click', () => {
+        const inputFile = document.createElement('input');
+        inputFile.type = 'file';
+        inputFile.accept = 'image/*';
+        
+        inputFile.onchange = (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const imageComponent = editor.addComponents({
+                type: 'image',
+                src: e.target.result,
+                style: { width: 'auto', height: 'auto', 'max-width': '100%' },
+              });
+              editor.select(imageComponent);
+            };
+            reader.readAsDataURL(file);
+          }
+        };
+        inputFile.click();
+      });
+    });
+  </script>
 </body>
 </html>

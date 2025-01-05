@@ -60,16 +60,3 @@ body, html {
   .navbar .nav-links a:hover {
     color: #f39c12;
   }
-
-  #customize-template h2 {
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  #customize-container {
-    min-height: 300px;
-    padding: 20px;
-    border: 1px dashed #ccc;
-    background-color: #f8f9fa;
-    
-  }
