@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GrapesJS Template Editor</title>
-  <!-- GrapesJS CSS -->
   <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
-  <link rel = "stylesheet" href = "customize.css">
+  <link rel="stylesheet" href="customize.css">
   <style>
     body {
       margin: 0;
@@ -36,7 +35,7 @@
       background: #0056b3;
     }
     #gjs {
-      flex: 1; /* Editor takes up the remaining space */
+      flex: 1;
     }
   </style>
 </head>
@@ -54,82 +53,91 @@
     </div>
   </nav>
   <div id="editor-container">
-    <!-- GrapesJS Editor Container -->
     <div id="gjs"></div>
   </div>
 
-  <!-- GrapesJS JavaScript -->
   <script src="https://unpkg.com/grapesjs"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    // Function to load template content
+    async function loadTemplateContent(category) {
+      try {
+        const response = await fetch(`../templates/${category}.html`);
+        if (!response.ok) throw new Error('Failed to load template');
+        return await response.text();
+      } catch (error) {
+        console.error("Error loading template:", error);
+        return `
+          <div class="error-message">
+            <h2>Failed to load template</h2>
+            <p>Please try again or select a different template.</p>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Get template category from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('template');
+      
+      if (!category) {
+        console.error("No template category provided");
+        return;
+      }
+
+      // Load template content
+      const templateContent = await loadTemplateContent(category);
+
       // Initialize GrapesJS Editor
       const editor = grapesjs.init({
         container: '#gjs',
-        fromElement: true,
-        components: `
-          <div class="header">
-            <h1>Welcome to the Template Editor</h1>
-          </div>
-          <div class="content">
-            <p>Use the toolbar to add text or upload images.</p>
-          </div>
-        `,
-        style: `
-          .header {
-            text-align: center;
-            background: #f5f5f5;
-            padding: 20px;
-          }
-          .content {
-            padding: 20px;
-          }
-          img {
-            display: block;
-            margin: 10px auto;
-            max-width: 100%;
-          }
-        `,
+        fromElement: false,
+        components: templateContent,
+        height: '100%',
+        storageManager: false,
         plugins: ['gjs-blocks-basic'],
         pluginsOpts: {
           'gjs-blocks-basic': {}
         },
+        canvas: {
+          styles: [
+            'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
+          ]
+        }
       });
 
       // Add Text Button Functionality
-      const addTextBtn = document.getElementById('add-text-btn');
-      addTextBtn.addEventListener('click', () => {
+      document.getElementById('add-text-btn').addEventListener('click', () => {
         const textComponent = editor.addComponents({
           type: 'text',
           content: 'New Text Block',
           style: { padding: '10px', 'font-size': '16px' },
         });
-        editor.select(textComponent); // Automatically select the new component
+        editor.select(textComponent);
       });
 
       // Upload Image Button Functionality
-      const uploadImageBtn = document.getElementById('upload-image-btn');
-      uploadImageBtn.addEventListener('click', () => {
-        // Create an <input type="file"> element to select the image
+      document.getElementById('upload-image-btn').addEventListener('click', () => {
         const inputFile = document.createElement('input');
         inputFile.type = 'file';
-        inputFile.accept = 'image/*'; // Allow only image files
+        inputFile.accept = 'image/*';
+        
         inputFile.onchange = (event) => {
           const file = event.target.files[0];
           if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-              // Add the uploaded image to the editor
               const imageComponent = editor.addComponents({
                 type: 'image',
                 src: e.target.result,
                 style: { width: 'auto', height: 'auto', 'max-width': '100%' },
               });
-              editor.select(imageComponent); // Automatically select the new component
+              editor.select(imageComponent);
             };
-            reader.readAsDataURL(file); // Read the file as a Data URL
+            reader.readAsDataURL(file);
           }
         };
-        inputFile.click(); // Trigger the file input dialog
+        inputFile.click();
       });
     });
   </script>
