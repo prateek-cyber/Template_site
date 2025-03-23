@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../../assets/grapesjs/grapes.min.css">
   <link rel="stylesheet" href="customize.css">
   <style>
-    body {
+     body {
       margin: 0;
       font-family: Arial, sans-serif;
     }
@@ -16,42 +16,12 @@
       flex-direction: column;
       height: 100vh;
     }
-    #toolbar {
-      background: #333;
-      color: white;
-      padding: 10px;
-      display: flex;
-      gap: 10px;
-    }
-    #toolbar button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    #toolbar button:hover {
-      background: #0056b3;
-    }
     #gjs {
       flex: 1;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <h1 class="logo">TemplateHub</h1>
-      <ul class="nav-links">
-        <li><a href="../../Index/index.html">Home</a></li>
-        <li><a href="#">Features</a></li>
-        <li><a href="#">Pricing</a></li>
-        <li><a href="../category.html">Templates</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
   <div id="editor-container">
     <div id="gjs"></div>
   </div>
@@ -66,29 +36,20 @@
         return await response.text();
       } catch (error) {
         console.error("Error loading template:", error);
-        return `
-          <div class="error-message">
-            <h2>Failed to load template</h2>
-            <p>Please try again or select a different template.</p>
-          </div>
-        `;
+        return `<div class='error-message'><h2>Failed to load template</h2><p>Please try again or select a different template.</p></div>`;
       }
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      // Get template category from URL
       const urlParams = new URLSearchParams(window.location.search);
       const category = urlParams.get('template');
-      
       if (!category) {
         console.error("No template category provided");
         return;
       }
 
-      // Load template content
       const templateContent = await loadTemplateContent(category);
 
-      // Initialize GrapesJS Editor
       const editor = grapesjs.init({
         container: '#gjs',
         fromElement: false,
@@ -96,48 +57,58 @@
         height: '100%',
         storageManager: false,
         plugins: ['gjs-blocks-basic'],
-        pluginsOpts: {
-          'gjs-blocks-basic': {}
-        },
-        canvas: {
-          styles: [
-            'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
-          ]
+        pluginsOpts: { 'gjs-blocks-basic': {} }
+      });
+
+      const blockManager = editor.BlockManager;
+
+      blockManager.add('title', {
+        label: 'Title',
+        content: '<h1>New Title</h1>',
+        category: 'Basic'
+      });
+
+      blockManager.add('paragraph', {
+        label: 'Paragraph',
+        content: '<p>New Paragraph</p>',
+        category: 'Basic'
+      });
+
+      blockManager.add('image', {
+        label: 'Image',
+        category: 'Basic',
+        content: '<img src="https://via.placeholder.com/150" alt="Image" class="custom-image"/>',
+        activate: true
+      });
+
+      blockManager.add('button', {
+        label: 'Button',
+        content: '<button style="background-color: #007bff; color: white; padding: 10px; border: none;">Click Me</button>',
+        category: 'Basic'
+      });
+
+      editor.on('component:add', (component) => {
+        if (component.is('image')) {
+          const inputFile = document.createElement('input');
+          inputFile.type = 'file';
+          inputFile.accept = 'image/*';
+          inputFile.style.display = 'none';
+          document.body.appendChild(inputFile);
+          
+          inputFile.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                component.set('src', e.target.result);
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+          
+          inputFile.click();
+          document.body.removeChild(inputFile);
         }
-      });
-
-      // Add Text Button Functionality
-      document.getElementById('add-text-btn').addEventListener('click', () => {
-        const textComponent = editor.addComponents({
-          type: 'text',
-          content: 'New Text Block',
-          style: { padding: '10px', 'font-size': '16px' },
-        });
-        editor.select(textComponent);
-      });
-
-      // Upload Image Button Functionality
-      document.getElementById('upload-image-btn').addEventListener('click', () => {
-        const inputFile = document.createElement('input');
-        inputFile.type = 'file';
-        inputFile.accept = 'image/*';
-        
-        inputFile.onchange = (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const imageComponent = editor.addComponents({
-                type: 'image',
-                src: e.target.result,
-                style: { width: 'auto', height: 'auto', 'max-width': '100%' },
-              });
-              editor.select(imageComponent);
-            };
-            reader.readAsDataURL(file);
-          }
-        };
-        inputFile.click();
       });
     });
   </script>
