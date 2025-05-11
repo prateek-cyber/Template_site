@@ -3,105 +3,584 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Template Customization</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Interactive Card Stack Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: 600;
+            color: #4a6bff;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #555;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #4a6bff;
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 107, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5bef;
+            transform: translateY(-2px);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: #fff;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #777;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            color: #4a6bff;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        /* Interactive Card Stack Section */
+        .card-stack-section {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .stack-container {
+            position: sticky;
+            top: 150px;
+            margin: 0 auto;
+            perspective: 1000px;
+            width: 300px;
+            height: 400px;
+        }
+        
+        .card-stack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            transform-origin: bottom center;
+            backface-visibility: hidden;
+            will-change: transform, opacity;
+        }
+        
+        .card h2 {
+            margin: 0 0 15px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .card p {
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .new-card-down {
+            transform: translateY(100px) rotate(5deg);
+            opacity: 0;
+        }
+        
+        .new-card-up {
+            transform: translateY(-100px) rotate(-5deg);
+            opacity: 0;
+        }
+        
+        .active {
+            transform: translateY(0) rotate(0);
+            opacity: 1;
+        }
+        
+        .stacked {
+            transform: translateY(-20px) scale(0.95) rotate(-2deg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+            z-index: 1;
+        }
+        
+        .stacked.second {
+            transform: translateY(-40px) scale(0.9) rotate(-4deg);
+            opacity: 0.8;
+            z-index: 2;
+        }
+        
+        .stacked.third {
+            transform: translateY(-60px) scale(0.85) rotate(-6deg);
+            opacity: 0.7;
+            z-index: 3;
+        }
+        
+        .stacked.fourth {
+            transform: translateY(-80px) scale(0.8) rotate(-8deg);
+            opacity: 0.6;
+            z-index: 4;
+        }
+        
+        .unstacking {
+            transform: translateY(-100px) rotate(-5deg);
+            opacity: 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .scroll-prompt {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #666;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+        
+        /* Demo Content Sections */
+        .demo-content {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+        
+        .content-block {
+            margin-bottom: 60px;
+        }
+        
+        .content-block h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .content-block p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 50px 0 30px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px;
+        }
+        
+        .footer-links li {
+            margin: 0 15px;
+        }
+        
+        .footer-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+        }
+        
+        .social-links li {
+            margin: 0 15px;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .copyright {
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <h1 class="logo">TemplateHub</h1>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">MailBuzz</a>
             <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="./Features/index.html">Features</a></li>
-                <li><a href="#">Pricing</a></li>
-                <li><a href="./Categories/category.html">Templates</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#features">Home</a></li>
+                <li><a href="#demo">Features</a></li>
+                <li><a href="#about">Templates</a></li>
+                <li><a href="#contact">Pricing</a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container hero-content">
-            <h1>Create Beautiful, Customizable Email Templates</h1>
-            <p>Design professional email templates effortlessly with our drag-and-drop customization tool. Perfect for businesses of all sizes.</p>
-            <a href="#" class="btn-primary">Get Started for Free</a>
+        <div class="container">
+            <h1>Create beautiful customizable email templates</h1>
+            <p>Design professional email templates effortlessly with our tool. Perfect for business of all sizes.</p>
+            <a href="#demo" class="btn btn-primary">View Demo</a>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features" id="features">
         <div class="container">
-            <h2>Why Choose Us?</h2>
-            <div class="feature-cards">
+            <div class="section-title">
+                <h2>Amazing Features</h2>
+                <p>Our card stack animation provides a unique and engaging way to present your content</p>
+            </div>
+            <div class="feature-grid">
                 <div class="feature-card">
-                    <i class="icon fas fa-paint-brush"></i>
+                    <div class="feature-icon">👆</div>
                     <h3>Easy Customization</h3>
-                    <p>Use our intuitive editor to drag, drop, and style each element to match your brand.</p>
+                    <p>Use our intituive editor to drag, drop, and style each element to match your brand.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="icon fas fa-mobile-alt"></i>
+                    <div class="feature-icon">🎨</div>
                     <h3>Responsive Design</h3>
                     <p>Our templates look stunning on both desktop and mobile devices.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="icon fas fa-share-alt"></i>
+                    <div class="feature-icon">⚡</div>
                     <h3>Seamless Integration</h3>
-                    <p>Export templates directly to your favorite email marketing platforms.</p>
+                    <p>Export templates directly to your favourite email marketing platforms.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container cta-content">
-            <h2>Start Designing Your Custom Email Templates Today</h2>
-            <p>Sign up for free and access all features with no credit card required.</p>
-            <a href="#" class="btn-secondary">Sign Up Now</a>
+    <!-- Interactive Card Stack Section -->
+    <section class="card-stack-section" id="demo">
+        <div class="container">
+            <div class="section-title">
+                <h2>What our users say</h2>
+            </div>
+            <div class="stack-container">
+                <div class="card-stack">
+                    <!-- Cards will be added here by JavaScript -->
+                </div>
+            </div>
+            <div class="scroll-prompt">Scroll to interact with cards</div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
+    <!-- Demo Content Sections -->
+    <section class="demo-content" id="about">
         <div class="container">
-            <h2>What Our Users Say</h2>
-            <div class="testimonial-cards">
-                <div class="testimonial-card">
-                    <p>"TemplateHub has transformed the way we communicate with customers. The templates are beautiful and easy to customize."</p>
-                    <h3>- Sarah, Marketing Manager</h3>
-                </div>
-                <div class="testimonial-card">
-                    <p>"I can now create branded emails without any design skills. Highly recommend for any business."</p>
-                    <h3>- James, Small Business Owner</h3>
-                </div>
-                <div class="testimonial-card">
-                    <p>"The drag-and-drop editor is so simple to use. Our email open rates have increased since switching to TemplateHub."</p>
-                    <h3>- Linda, Freelancer</h3>
-                </div>
+            <div class="content-block">
+                <h3>How It Works</h3>
+                <p>The card stacking animation uses advanced CSS transforms and JavaScript scroll detection to create a seamless interactive experience. As you scroll down, new cards animate into view and stack beneath the current card. When you scroll up, the top card animates away, revealing the card beneath it.</p>
+            </div>
+            <div class="content-block">
+                <h3>Customization Options</h3>
+                <p>Easily customize the animation to match your brand. Change colors, animation speeds, stacking distances, and more. The cards can contain any content you need - text, images, videos, or interactive elements.</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer id="contact">
         <div class="container">
-            <p>&copy; 2024 TemplateHub. All rights reserved.</p>
-            <ul class="social-links">
-                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <ul class="footer-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
+            <ul class="social-links">
+                <li><a href="#"><span>📱</span></a></li>
+                <li><a href="#"><span>💻</span></a></li>
+                <li><a href="#"><span>📧</span></a></li>
+            </ul>
+            <p class="copyright">© 2024 CardStack Interactive. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Font Awesome for Icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardStack = document.querySelector('.card-stack');
+            const colors = ['#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+            const messages = [
+                "TemplateHub has transformed the way we communicate with customers. The templates are beautiful and easy to customize.",
+                "I can now create branded emails without any design skills. Highly recommend for any business.",
+                "The drag-and-drop editor is so simple to use. Our email open rates have increased since switching to TemplateHub.",
+                "Best email template builder I've used. Saved me hours of design work every week!",
+                "The customer support is exceptional. They helped me create custom templates for our unique needs.",
+                "Worth every penny. Our email campaigns look more professional than ever before."
+            ];
+
+            const authors = [
+                "Sarah Johnson, Marketing Manager",
+                "David Smith, Small Business Owner",
+                "Emily Davis, E-commerce Specialist",
+                "Michael Brown, Freelance Designer",
+                "Jessica Wilson, Non-profit Director",
+                "Chris Lee, Startup Founder"
+            ];
+            
+            let cards = [];
+            let lastScrollPosition = window.pageYOffset;
+            let isAnimating = false;
+            let currentIndex = 0;
+            
+            // Create initial card
+            addCard('down');
+            
+            // Improved scroll handling with debounce
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(handleScroll, 100);
+            });
+            
+            function handleScroll() {
+                const currentScrollPosition = window.pageYOffset;
+                const isScrollingDown = currentScrollPosition > lastScrollPosition;
+                lastScrollPosition = currentScrollPosition;
+                
+                if (isAnimating) return;
+                
+                // Get position of card stack section
+                const stackSection = document.querySelector('.card-stack-section');
+                const sectionTop = stackSection.offsetTop;
+                const sectionHeight = stackSection.offsetHeight;
+                const viewportHeight = window.innerHeight;
+                const scrollPosition = currentScrollPosition + viewportHeight;
+                
+                // Only trigger when section is in view
+                if (scrollPosition > sectionTop && currentScrollPosition < sectionTop + sectionHeight) {
+                    const sectionMiddle = sectionTop + (sectionHeight / 2);
+                    const isPastMiddle = scrollPosition > sectionMiddle;
+                    
+                    if (isScrollingDown && isPastMiddle) {
+                        showNextCard();
+                    } else if (!isScrollingDown && !isPastMiddle) {
+                        showPreviousCard();
+                    }
+                }
+            }
+            
+            function showNextCard() {
+                if (isAnimating || currentIndex >= 5) return;
+                
+                isAnimating = true;
+                currentIndex++;
+                addCard('down');
+            }
+            
+            function showPreviousCard() {
+                if (isAnimating || currentIndex <= 0) return;
+                
+                isAnimating = true;
+                currentIndex--;
+                removeCard();
+            }
+            
+            function addCard(direction) {
+                const newCard = document.createElement('div');
+                newCard.className = `card new-card-${direction}`;
+                newCard.style.backgroundColor = colors[currentIndex];
+                newCard.innerHTML = `
+                    <p>${messages[currentIndex]}</p>
+                    <p>${authors[currentIndex]}</p>
+                `;
+                
+                cardStack.prepend(newCard);
+                cards.unshift(newCard);
+                
+                // Animate the new card in
+                setTimeout(() => {
+                    newCard.classList.add('active');
+                    
+                    // After animation completes, stack all cards
+                    setTimeout(() => {
+                        updateCardStack();
+                        isAnimating = false;
+                    }, 500);
+                }, 50);
+            }
+            
+            function removeCard() {
+                const topCard = cards[0];
+                topCard.classList.remove('active');
+                topCard.classList.add('unstacking');
+                
+                // Remove card after animation completes
+                setTimeout(() => {
+                    topCard.remove();
+                    cards.shift();
+                    updateCardStack();
+                    isAnimating = false;
+                }, 500);
+            }
+            
+            function updateCardStack() {
+                cards.forEach((card, index) => {
+                    // Reset all cards first
+                    card.className = 'card';
+                    card.style.zIndex = cards.length - index;
+                    
+                    // First card (top card) gets no stacking
+                    if (index === 0) {
+                        card.classList.add('active');
+                        return;
+                    }
+                    
+                    // Apply stacking based on position
+                    card.classList.add('stacked');
+                    if (index === 1) card.classList.add('second');
+                    if (index === 2) card.classList.add('third');
+                    if (index === 3) card.classList.add('fourth');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
