@@ -15,7 +15,7 @@ function loadCategory(category) {
       {src: "../Images/template1.png", title: "Gym template 1", html: "gym-template-1"}
     ],
     travel: [
-      {src: "../Images/travel.png", title: "travel template 1", html: "travel-template-1"}
+      {src: "../Images/travel.png", title: "Travel template 1", html: "travel-template-1"}
     ]
     // Define other categories if needed
   };
